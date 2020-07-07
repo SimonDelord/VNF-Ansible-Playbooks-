@@ -1,0 +1,31 @@
+---
+- name: deploy configure and start VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+
+  - name: find the PID for cisco-vnf-agent
+    ignore_errors: yes
+    shell: "ps -few | grep cisco-vnf-agent.sh | grep -v grep | awk '{print $2}'"
+    register: ciscoAgentRunningProcess
+
+  - name: kill cisco-vnf-agent
+    ignore_errors: yes
+    shell: "kill {{item}}"
+    with_items: "{{ ciscoAgentRunningProcess.stdout_lines }}"
+
+  - name: destroy Cisco CSR
+    command: >
+        virsh destroy my_csr_vm_ansible
+
+#  - name: start the monitoring agent for Cisco CSR
+#    command: >
+#        nohup /bin/sh /var/log/cisco-vnf-agent.sh &
+#    command: sh /var/log/cisco-vnf-agent.sh 
+#    async: 31536000
+#    poll: 0
+

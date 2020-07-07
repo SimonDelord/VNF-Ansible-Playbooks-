@@ -1,0 +1,25 @@
+---
+- name: configure VXLAN between two SDN Gateways
+  hosts: 10.1.145.195
+  become: true
+
+  tasks:
+
+  - name: create a vxlan interface for ovs-vxlan
+    openvswitch_port:
+      bridge: ovs-vxlan
+      port: vxlan300
+      state: absent
+
+
+- name: configure VXLAN between two SDN Gateways
+  hosts: 10.1.145.196
+  become: true
+
+  tasks:
+
+  - name: create a vxlan interface for ovs-vxlan
+    openvswitch_port:
+      bridge: ovs-vxlan
+      port: vxlan300
+      state: absent

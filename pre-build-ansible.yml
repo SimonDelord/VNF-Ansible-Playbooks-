@@ -1,0 +1,10 @@
+---
+- name: deploy configure and start collectd
+  hosts: 10.1.145.200
+  become: true
+
+  tasks:
+  - name: deploy collectd software package on sdn gateway
+    yum:
+      state: latest
+      name: epel-release

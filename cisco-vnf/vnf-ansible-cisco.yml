@@ -1,0 +1,73 @@
+---
+- name: deploy configure and start VNF
+  hosts: 10.1.145.200
+  become: true
+
+  tasks:
+  - name: lists the VNFs on the host
+    virt:
+        command: list_vms
+    register: all_vms
+
+  - name: print all returned values
+    debug:
+      msg: "{{ all_vms.list_vms }}"
+
+#  - name: Copy the ISO (day 0 config file) for the CSR1K
+#    synchronize:
+#      src=/etc/ansible/all-scripts-for-sdn-gw/csr_config.iso
+#      dest=/ANSIBLE/
+#      times=no 
+#      perms=no 
+#      group=no 
+#      rsync_path="sudo rsync"
+#    delegate_to: localhost
+#    sudo: no
+
+#  - name: Copy the VNF File (csr-vnf-ansible-file.xml) for the CSR1K
+#    synchronize:
+#      src=/etc/ansible/all-scripts-for-sdn-gw/csr-vnf-ansible-file.xml
+#      dest=/ANSIBLE/
+#    delegate_to: localhost
+
+  - name: create Cisco CSR
+    command: >
+        virsh create /ANSIBLE/csr-vnf-ansible-file.xml
+
+#  - name: lists the VNFs on the host 
+#    virt:
+#    command: list_vms
+#    register: all_vms
+   
+#  - name: define vm
+#    virt:
+#     command: define
+#     xml: "{{ lookup('file', '{{ /root/cisco/ansible-vnf/csr-vnf-ansible-file.xml }}') }}"
+#    xml:root/cisco/ansible-vnf/csr-vnf-ansible-file.xml
+#     autostart: yes
+ 
+#  - name: start vm
+#    virt:
+#      name: my_csr_vm_ansible
+#      state: running
+
+
+#    debug:
+#      msg: "{{all_vms.stdout_lines}}"
+
+#  - name: Copy Remote-To-SDN GW the ovs rpm file (from jumphost to sdn-gw)
+#    synchronize:
+#       src=/root/rpmbuild/RPMS/x86_64/openvswitch-2.12.0-1.el7.x86_64.rpm
+#       dest=/root/rpmbuild/RPMS/x86_64/
+#    delegate_to: localhost
+
+#  - name: deploy ovs rpm package from jumhost to SDN GW
+#    yum:
+#      name: /root/rpmbuild/RPMS/x86_64/openvswitch-2.12.0-1.el7.x86_64.rpm
+#      state: present
+
+#  - name: Start ovs process
+#    systemd:
+#      name: openvswitch
+#      state: started
+#      enabled: yes

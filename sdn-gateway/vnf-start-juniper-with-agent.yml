@@ -1,0 +1,18 @@
+---
+- name: deploy configure and start VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+  - name: create Juniper vSRX
+    command: >
+        virsh create /ANSIBLE/vsrx-vnf-file.xml
+
+  - name: start the monitoring agent for Juniper vSRX
+    command: sh /var/log/juniper-vnf-agent.sh 
+    async: 31536000
+    poll: 0
+

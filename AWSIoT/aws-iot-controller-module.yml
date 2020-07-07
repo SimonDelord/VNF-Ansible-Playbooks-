@@ -1,0 +1,12 @@
+---
+- name: deploy configure and start VNF
+  hosts: 10.1.145.213
+
+  tasks:
+
+  - name: deploy base AWS IoT Greengrass config
+    command: >
+        aws greengrass create-deployment --deployment-type NewDeployment --group-id aa375f11-de19-42ee-bff2-e8c0c17f0524 --group-version-id 1d6b570f-9490-469c-a32d-38fe9e1df6bf
+
+
+

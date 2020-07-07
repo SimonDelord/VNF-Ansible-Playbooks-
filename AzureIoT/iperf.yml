@@ -1,0 +1,12 @@
+---
+- name: start Iperf on the relevant sdn gw
+  hosts: "{{server}}"
+
+  tasks:
+
+  - name: run iperf
+    command: iperf -i 10  -t 300 -c 54.252.200.50
+    async: 120
+    poll: 0
+
+

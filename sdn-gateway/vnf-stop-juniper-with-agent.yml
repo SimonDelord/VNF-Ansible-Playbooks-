@@ -1,0 +1,25 @@
+---
+- name: stop the Juniper VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+
+  - name: find the PID for juniper-vnf-agent
+    ignore_errors: yes
+    shell: "ps -few | grep juniper-vnf-agent.sh | grep -v grep | awk '{print $2}'"
+    register: juniperAgentRunningProcess
+
+  - name: kill juniper-vnf-agent
+    ignore_errors: yes
+    shell: "kill {{item}}"
+    with_items: "{{ juniperAgentRunningProcess.stdout_lines }}"
+
+  - name: destroy Juniper vSRX
+    command: >
+        virsh destroy vSRXVM
+
+

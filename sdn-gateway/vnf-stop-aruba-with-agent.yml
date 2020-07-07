@@ -1,0 +1,25 @@
+---
+- name: stop the Aruba VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+
+  - name: find the PID for aruba-vnf-agent
+    ignore_errors: yes
+    shell: "ps -few | grep aruba-vnf-agent.sh | grep -v grep | awk '{print $2}'"
+    register: arubaAgentRunningProcess
+
+  - name: kill aruba-vnf-agent
+    ignore_errors: yes
+    shell: "kill {{item}}"
+    with_items: "{{ arubaAgentRunningProcess.stdout_lines }}"
+
+  - name: shutdown Aruba vMC
+    command: >
+        virsh shutdown aruba_vmc
+
+

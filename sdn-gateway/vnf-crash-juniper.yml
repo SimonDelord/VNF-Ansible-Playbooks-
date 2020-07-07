@@ -1,0 +1,14 @@
+---
+- name: stop the Juniper VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+  - name: destroy Juniper vSRX
+    command: >
+        virsh destroy vSRXVM
+
+

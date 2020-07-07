@@ -1,0 +1,25 @@
+---
+- name: stop the Riverbed VNF
+  hosts: "{{server}}"
+  vars:
+    server: "you didn't specify a server"
+  become: true
+
+  tasks:
+
+
+  - name: find the PID for riverbed-vnf-agent
+    ignore_errors: yes
+    shell: "ps -few | grep riverbed-vnf-agent.sh | grep -v grep | awk '{print $2}'"
+    register: riverbedAgentRunningProcess
+
+  - name: kill riverbed-vnf-agent
+    ignore_errors: yes
+    shell: "kill {{item}}"
+    with_items: "{{ riverbedAgentRunningProcess.stdout_lines }}"
+
+  - name: shutdown riverbed VNF
+    command: >
+        virsh destroy RiverbedVM
+
+

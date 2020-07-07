@@ -1,0 +1,25 @@
+---
+- name: configure VXLAN between two SDN Gateways
+  hosts: "{{sdngatewayA}}"
+  become: true
+
+  tasks:
+
+  - name: create a vxlan interface for ovs-vxlan
+    openvswitch_port:
+      bridge: ovs-vxlan
+      port: "{{vxlanid}}"
+      state: absent
+
+
+- name: configure VXLAN between two SDN Gateways
+  hosts: "{{sdngatewayB}}"
+  become: true
+
+  tasks:
+
+  - name: create a vxlan interface for ovs-vxlan
+    openvswitch_port:
+      bridge: ovs-vxlan
+      port: "{{vxlanid}}"
+      state: absent
